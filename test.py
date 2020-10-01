@@ -9,7 +9,7 @@ def main():
     feature, label = utils.prepare_data(namelist)
     feature = torch.tensor(feature, dtype=torch.float32)
     label = torch.tensor(label, dtype=torch.float32)
-
+    """加载模型"""
     model_load = utils.SimpleNet()
     checkpoint = torch.load('D:\大三下\AI CUP\Process\model_save\model.pth.tar') # 加载训练好的模型
     model_load.load_state_dict(checkpoint['state_dict'])

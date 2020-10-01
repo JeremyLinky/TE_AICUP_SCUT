@@ -5,6 +5,8 @@ import torch
 import pandas as pd
 import os
 
+size_of_test = 0.09
+
 """准备数据"""
 def prepare_data(namelist):
     """加载铆压机的数据集"""
