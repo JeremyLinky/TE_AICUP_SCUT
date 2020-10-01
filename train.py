@@ -16,8 +16,8 @@ def main():
 
     """训练参数"""
     batch_size = 6
-    learning_rate = 3e-3
-    epoches = 1000
+    learning_rate = 3e-4
+    epoches = 3000
 
     """载入训练集与测试集数据"""
     train_data = utils.train_mini_train(feature, label)
@@ -39,6 +39,10 @@ def main():
 
     """训练"""
     for epoch in range(epoches):
+        if epoch == 0.4*epoches:
+            optim = opt.Adam(params=net.parameters(), lr=1*learning_rate)
+        elif epoch == 0.8*epoches:
+            optim = opt.Adam(params=net.parameters(), lr=1 * learning_rate)
         net.train()  # 训练
         for step, data in enumerate(train_loader, start=0):
             images, labels = data

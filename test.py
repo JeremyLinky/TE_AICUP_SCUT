@@ -13,7 +13,8 @@ def main():
     model_load = utils.SimpleNet()
     checkpoint = torch.load('D:\大三下\AI CUP\Process\model_save\model.pth.tar') # 加载训练好的模型
     model_load.load_state_dict(checkpoint['state_dict'])
-    outputs = model_load(feature.reshape(42, 12, 8, 8))
+    """输出结果"""
+    outputs = model_load(feature.reshape(len(namelist), 12, 8, 8))
     inference_acc = utils.eval_on_output(label, outputs)
     #print(label)
     #print(outputs)

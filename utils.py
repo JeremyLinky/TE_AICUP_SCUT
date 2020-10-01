@@ -80,7 +80,7 @@ class train_mini_train():
 
         # 数据集切分
         self.X_train, self.X_test, self.y_train, self.y_test = \
-            model_selection.train_test_split(self.X, self.y, random_state=0)
+            model_selection.train_test_split(self.X, self.y, test_size=size_of_test,random_state=0)
 
         print('构建训练集样本总数：', len(self.y_train))
 
@@ -97,7 +97,7 @@ class test_mini_test():
     def __init__(self, feature, label):
         self.X, self.y = feature, label
         self.X_train, self.X_test, self.y_train, self.y_test = \
-            model_selection.train_test_split(self.X, self.y, random_state=0)
+            model_selection.train_test_split(self.X, self.y, test_size=size_of_test, random_state=0)
 
         print('构建测试集样本总数：', len(self.y_test))
 
