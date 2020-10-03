@@ -3,7 +3,7 @@ import utils
 
 def main():
 
-    file_name = '1-结果-CSV_NOK_20200608152647.csv' # 数据文件名称
+    file_name = '0930-2_NOK_20200929114544.csv' # 数据文件名称
 
     """构造数据集"""
     feature = utils.process_data(file_name)

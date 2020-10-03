@@ -1,0 +1,39 @@
+digraph {
+	graph [size="12,12"]
+	node [align=left fontsize=12 height=0.2 ranksep=0.1 shape=box style=filled]
+	2809917335984 [label=AddmmBackward fillcolor=darkolivegreen1]
+	2809917336040 -> 2809917335984
+	2809917336040 [label="fc.bias
+ (2)" fillcolor=lightblue]
+	2809917336096 -> 2809917335984
+	2809917336096 [label=ViewBackward]
+	2809917336264 -> 2809917336096
+	2809917336264 [label=MaxPool2DWithIndicesBackward]
+	2809917336376 -> 2809917336264
+	2809917336376 [label=ReluBackward0]
+	2809917336488 -> 2809917336376
+	2809917336488 [label=ThnnConv2DBackward]
+	2809917336600 -> 2809917336488
+	2809917336600 [label=MaxPool2DWithIndicesBackward]
+	2809917336824 -> 2809917336600
+	2809917336824 [label=ReluBackward0]
+	2809917336936 -> 2809917336824
+	2809917336936 [label=ThnnConv2DBackward]
+	2809917337048 -> 2809917336936
+	2809917337048 [label="conv1.0.weight
+ (4, 12, 2, 2)" fillcolor=lightblue]
+	2809917337104 -> 2809917336936
+	2809917337104 [label="conv1.0.bias
+ (4)" fillcolor=lightblue]
+	2809917336656 -> 2809917336488
+	2809917336656 [label="conv4.0.weight
+ (8, 4, 2, 2)" fillcolor=lightblue]
+	2809917336712 -> 2809917336488
+	2809917336712 [label="conv4.0.bias
+ (8)" fillcolor=lightblue]
+	2809917336152 -> 2809917335984
+	2809917336152 [label=TBackward]
+	2809917336320 -> 2809917336152
+	2809917336320 [label="fc.weight
+ (2, 32)" fillcolor=lightblue]
+}
