@@ -11,7 +11,7 @@ def main():
     feature = torch.tensor(feature, dtype=torch.float32)
     """加载模型"""
     model_load = utils.SimpleNet()
-    checkpoint = torch.load(pwd +'\vmodel_sae\model.pth.tar') # 加载训练好的模型
+    checkpoint = torch.load(pwd +'\model_save\model.pth.tar') # 加载训练好的模型
     model_load.load_state_dict(checkpoint['state_dict'])
     outputs = model_load(feature.reshape(1, 12, 8, 8))
 
