@@ -2,6 +2,7 @@ import torch.utils.data as Data   #分批次loader数据集使用
 import torch.nn as nn    #神经网络API
 import torch.optim as opt     #神经网络优化器
 import matplotlib.pyplot as plt  #数据可视化
+from torchvision import transforms
 import torch
 from Visual_utils import plot_loss_result, plot_train_and_test_result, printNetInfo
 import os
@@ -9,7 +10,9 @@ import utils
 pwd = os.getcwd()  # 当前目录
 def main():
     namelist = os.listdir(pwd+'/data') #数据目录
-
+    transform = transforms.Compose(
+        [transforms.ToTensor(), transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])])
+    # 归一化&标准化数据
 
     """构造数据集"""
     feature, label = utils.prepare_data(namelist)
@@ -20,8 +23,8 @@ def main():
     epoches = 3000
 
     """载入训练集与测试集数据"""
-    train_data = utils.train_mini_train(feature, label)
-    test_data = utils.test_mini_test(feature, label)
+    train_data = utils.train_mini_train(feature, label, transform)
+    test_data = utils.test_mini_test(feature, label, transform)
     train_loader = Data.DataLoader(dataset=train_data, batch_size=batch_size, shuffle=True)
     test_loader = Data.DataLoader(dataset=test_data, batch_size=batch_size, shuffle=True)
 

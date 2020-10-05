@@ -70,17 +70,20 @@ def process_data(file_path):
 """构建训练集类"""
 class train_mini_train():
 
-    def __init__(self,feature, label):
+    def __init__(self,feature, label, transform=None):
         # 加载数据集
         self.X, self.y = \
             feature,label
 
         print('样本总数：', len(self.X))
         print('样本特征维度：', len(self.X[0]))
-
+        self.transform = transform
         # 数据集切分
         self.X_train, self.X_test, self.y_train, self.y_test = \
             model_selection.train_test_split(self.X, self.y, test_size=size_of_test,random_state=0)
+
+        if self.transform:
+            self.X_train = self.transform(self.X_train).div(255).permute(1,2,0).numpy()
 
         print('构建训练集样本总数：', len(self.y_train))
 
@@ -94,10 +97,14 @@ class train_mini_train():
 """构建测试集类"""
 class test_mini_test():
 
-    def __init__(self, feature, label):
+    def __init__(self, feature, label, transform=None):
         self.X, self.y = feature, label
         self.X_train, self.X_test, self.y_train, self.y_test = \
             model_selection.train_test_split(self.X, self.y, test_size=size_of_test, random_state=0)
+        self.transform = transform
+
+        if self.transform:
+            self.X_test = self.transform(self.X_test).div(255).permute(1,2,0).numpy()
 
         print('构建测试集样本总数：', len(self.y_test))
 
