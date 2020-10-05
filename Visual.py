@@ -1,14 +1,14 @@
 import pandas as pd
 import os
 import Visual_utils
-
+"""此文件用来生成原始数据的可视化图形"""
 def main():
-
-    namelist = os.listdir('D:/大三下/AI CUP/铆压机导出的数据') #数据目录
+    pwd = os.getcwd()  # 当前目录
+    namelist = os.listdir(pwd+'\data') #数据目录
 
     for i in range(0,len(namelist)):
 
-        Ndir = os.path.join('D:/大三下/AI CUP/铆压机导出的数据', namelist[i]);  # 保存可视化后的折线图
+        Ndir = os.path.join(pwd+'\data', namelist[i]);  # 保存可视化后的折线图
         csv_path = Ndir  # 此处要将“\”替换为“/”
         os.chdir(os.path.dirname(csv_path))  # 用os库改变目录
 

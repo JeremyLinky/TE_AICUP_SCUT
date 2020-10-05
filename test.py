@@ -1,9 +1,9 @@
 import torch
 import os
 import utils
-
+pwd = os.getcwd()  # 当前目录
 def main():
-    namelist = os.listdir('D:/大三下/AI CUP/铆压机导出的数据')  # 数据目录
+    namelist = os.listdir(pwd+'/data')  # 数据目录
 
     """构造数据集"""
     feature, label = utils.prepare_data(namelist)
@@ -11,7 +11,7 @@ def main():
     label = torch.tensor(label, dtype=torch.float32)
     """加载模型"""
     model_load = utils.SimpleNet()
-    checkpoint = torch.load('D:\大三下\AI CUP\Process\model_save\model.pth.tar') # 加载训练好的模型
+    checkpoint = torch.load(pwd+'\model_save\model.pth.tar') # 加载训练好的模型
     model_load.load_state_dict(checkpoint['state_dict'])
     """输出结果"""
     outputs = model_load(feature.reshape(len(namelist), 12, 8, 8))

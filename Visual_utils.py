@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import os
 import numpy as np
-
+pwd = os.getcwd()  # 当前目录
 """可视化折线图"""
 def visualize(data,name):
 
@@ -37,7 +37,7 @@ def visualize(data,name):
     plt.title('铆压数据')
     plt.grid(True, linestyle = "--",color = "gray", linewidth = "0.5",axis = 'both')
 
-    dir = os.path.join('D:\大三下\AI CUP\铆压机可视化数据', name + ".png");  # 保存可视化后的折线图
+    dir = os.path.join(pwd+'\original_plot', name + ".png");  # 保存可视化后的折线图
     plt.savefig(dir)
 
     plt.show()  # 显示折线图

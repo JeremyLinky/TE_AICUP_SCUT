@@ -6,9 +6,9 @@ import torch
 from Visual_utils import plot_loss_result, plot_train_and_test_result, printNetInfo
 import os
 import utils
-
+pwd = os.getcwd()  # 当前目录
 def main():
-    namelist = os.listdir('D:/大三下/AI CUP/铆压机导出的数据') #数据目录
+    namelist = os.listdir(pwd+'/data') #数据目录
 
 
     """构造数据集"""
@@ -71,7 +71,7 @@ def main():
 
         if train_acc==1.0 and test_acc==1.0:
             """保存模型"""
-            torch.save({'state_dict': net.state_dict()}, 'D:\大三下\AI CUP\Process\model_save\model.pth.tar')
+            torch.save({'state_dict': net.state_dict()}, pwd+'\model_save\model.pth.tar')
             print("Perfect!Done!")
 
     """可视化loss"""

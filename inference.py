@@ -1,8 +1,9 @@
 import torch
 import utils
+import os
 
 def main():
-
+    pwd = os.getcwd() # 当前目录
     file_name = '0930-2_NOK_20200929114544.csv' # 数据文件名称
 
     """构造数据集"""
@@ -10,7 +11,7 @@ def main():
     feature = torch.tensor(feature, dtype=torch.float32)
     """加载模型"""
     model_load = utils.SimpleNet()
-    checkpoint = torch.load('D:\大三下\AI CUP\Process\model_save\model.pth.tar') # 加载训练好的模型
+    checkpoint = torch.load(pwd +'\vmodel_sae\model.pth.tar') # 加载训练好的模型
     model_load.load_state_dict(checkpoint['state_dict'])
     outputs = model_load(feature.reshape(1, 12, 8, 8))
 
