@@ -2,7 +2,7 @@ import torch.utils.data as Data   #分批次loader数据集使用
 import torch.nn as nn    #神经网络API
 import torch.optim as opt     #神经网络优化器
 import matplotlib.pyplot as plt  #数据可视化
-from torchvision import transforms
+import time
 import torch
 from Visual_utils import plot_loss_result, plot_train_and_test_result, printNetInfo
 import os
@@ -10,21 +10,18 @@ import utils
 pwd = os.getcwd()  # 当前目录
 def main():
     namelist = os.listdir(pwd+'/data') #数据目录
-    transform = transforms.Compose(
-        [transforms.ToTensor(), transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])])
-    # 归一化&标准化数据
 
     """构造数据集"""
     feature, label = utils.prepare_data(namelist)
 
     """训练参数"""
-    batch_size = 6
-    learning_rate = 3e-4
+    batch_size = 128
+    learning_rate = 4e-3
     epoches = 3000
 
     """载入训练集与测试集数据"""
-    train_data = utils.train_mini_train(feature, label, transform)
-    test_data = utils.test_mini_test(feature, label, transform)
+    train_data = utils.train_mini_train(feature, label)
+    test_data = utils.test_mini_test(feature, label)
     train_loader = Data.DataLoader(dataset=train_data, batch_size=batch_size, shuffle=True)
     test_loader = Data.DataLoader(dataset=test_data, batch_size=batch_size, shuffle=True)
 
@@ -39,13 +36,15 @@ def main():
     train_accs = []
     test_accs = []
     losses = []
-
+    #取消下列注释可以从上一个训练好的模型开始训练
+    #checkpoint = torch.load(pwd +'\model_save\model.pth.tar') # 加载训练好的模型
+    #net.load_state_dict(checkpoint['state_dict'])
     """训练"""
     for epoch in range(epoches):
-        if epoch == 0.4*epoches:
-            optim = opt.Adam(params=net.parameters(), lr=1*learning_rate)
-        elif epoch == 0.8*epoches:
-            optim = opt.Adam(params=net.parameters(), lr=1 * learning_rate)
+        if 0.8*epoches > epoch >= 0.4*epoches:
+            optim = opt.Adam(params=net.parameters(), lr=0.5*learning_rate)
+        elif epoch >= 0.8*epoches:
+            optim = opt.Adam(params=net.parameters(), lr=0.3*learning_rate)
         net.train()  # 训练
         for step, data in enumerate(train_loader, start=0):
             images, labels = data
@@ -74,8 +73,9 @@ def main():
 
         if train_acc==1.0 and test_acc==1.0:
             """保存模型"""
-            torch.save({'state_dict': net.state_dict()}, pwd+'\model_save\model.pth.tar')
+            torch.save({'state_dict': net.state_dict(), 'optimizer':optim.state_dict()},pwd+'\model_save\model.pth.tar')
             print("Perfect!Done!")
+            time.sleep(2)
 
     """可视化loss"""
     plot_loss_result(losses)

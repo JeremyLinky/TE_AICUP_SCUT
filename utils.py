@@ -1,14 +1,17 @@
 from sklearn import model_selection
 import torch.nn as nn
+from torchvision import transforms
 import numpy as np
 import torch
 import pandas as pd
 import os
 
-size_of_test = 0.09 #测试集的占比
+size_of_test = 0.1 #测试集的占比
+random_state = 0
+pwd = os.getcwd() # 当前目录
 
 """准备数据"""
-def prepare_data(namelist):
+def prepare_data(namelist,istransform=False):
     """加载铆压机的数据集"""
     feature = []
     label = []
@@ -16,7 +19,7 @@ def prepare_data(namelist):
     """构造原始数据集（1：OK；0：NOK）"""
     for i in range(0,len(namelist)):
 
-        Ndir = os.path.join('D:/大三下/AI CUP/铆压机导出的数据', namelist[i]);
+        Ndir = os.path.join(pwd+'/data', namelist[i]);
         csv_path = Ndir  # 此处要将“\”替换为“/”
         os.chdir(os.path.dirname(csv_path))  # 用os库改变目录
 
@@ -39,18 +42,22 @@ def prepare_data(namelist):
         X = list()
         for i in range(-257, -1): # 左开右闭
             X.append(exampleData[i])
-        # print(np.array(X).shape)
         feature.append(X)
 
-
     feature = np.array(feature)
+    if istransform:
+        print("use transform")
+        transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])])
+        feature = transform(feature).div(255).permute(1, 2, 0).numpy()
+
     label = np.array(label)
     return feature, label
 
 """对输入的单个样本数据进行处理"""
-def process_data(file_path):
+def process_data(file_path, istransform=False):
     feature = []
-    Ndir = os.path.join('D:/大三下/AI CUP/铆压机导出的数据', file_path);
+    Ndir = os.path.join(pwd+'/data', file_path);
     csv_path = Ndir  # 此处要将“\”替换为“/”
     os.chdir(os.path.dirname(csv_path))  # 用os库改变目录
 
@@ -63,27 +70,37 @@ def process_data(file_path):
     X = list()
     for i in range(-257, -1): # 左开右闭
         X.append(exampleData[i])
-        # print(np.array(X).shape)
+
     feature.append(X)
+    feature = np.array(feature)
+
+    if istransform:
+        print("use transform")
+        transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])])
+        feature = transform(feature).div(255).permute(1, 2, 0).numpy()
+
     return feature
 
 """构建训练集类"""
 class train_mini_train():
 
-    def __init__(self,feature, label, transform=None):
+    def __init__(self,feature, label, istransform=False):
         # 加载数据集
         self.X, self.y = \
             feature,label
 
         print('样本总数：', len(self.X))
         print('样本特征维度：', len(self.X[0]))
-        self.transform = transform
         # 数据集切分
         self.X_train, self.X_test, self.y_train, self.y_test = \
-            model_selection.train_test_split(self.X, self.y, test_size=size_of_test,random_state=0)
+            model_selection.train_test_split(self.X, self.y, test_size=size_of_test,random_state=random_state)
 
-        if self.transform:
-            self.X_train = self.transform(self.X_train).div(255).permute(1,2,0).numpy()
+        if istransform:
+            print("use transform")
+            transform = transforms.Compose(
+                [transforms.ToTensor(), transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])])
+            self.X_train = transform(self.X_train).div(255).permute(1,2,0).numpy()
 
         print('构建训练集样本总数：', len(self.y_train))
 
@@ -97,14 +114,16 @@ class train_mini_train():
 """构建测试集类"""
 class test_mini_test():
 
-    def __init__(self, feature, label, transform=None):
+    def __init__(self, feature, label, istransform=False):
         self.X, self.y = feature, label
         self.X_train, self.X_test, self.y_train, self.y_test = \
-            model_selection.train_test_split(self.X, self.y, test_size=size_of_test, random_state=0)
-        self.transform = transform
+            model_selection.train_test_split(self.X, self.y, test_size=size_of_test, random_state=random_state)
 
-        if self.transform:
-            self.X_test = self.transform(self.X_test).div(255).permute(1,2,0).numpy()
+        if istransform:
+            print("use transform")
+            transform = transforms.Compose(
+                [transforms.ToTensor(), transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])])
+            self.X_test = transform(self.X_test).div(255).permute(1,2,0).numpy()
 
         print('构建测试集样本总数：', len(self.y_test))
 
